@@ -25,6 +25,8 @@
 
 FROM ubuntu:14.04
 MAINTAINER Tianon Gravi <admwiggin@gmail.com> (@tianon)
+ENV http_proxy=http://proxy.gre.hp.com:8080
+ENV https_proxy=http://proxy.gre.hp.com:8080
 
 RUN	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys E871F18B51E0147C77796AC81196BA81F6B0FC61
 RUN	echo deb http://ppa.launchpad.net/zfs-native/stable/ubuntu trusty main > /etc/apt/sources.list.d/zfs.list
