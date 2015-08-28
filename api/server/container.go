@@ -131,7 +131,7 @@ func (s *Server) getContainersLogs(version version.Version, w http.ResponseWrite
 
 	outStream := ioutils.NewWriteFlusher(w)
 	// write an empty chunk of data (this is to ensure that the
-	// HTTP Response is sent immediatly, even if the container has
+	// HTTP Response is sent immediately, even if the container has
 	// not yet produced any data)
 	outStream.Write(nil)
 
@@ -399,13 +399,13 @@ func (s *Server) postContainersCreate(version version.Version, w http.ResponseWr
 	}
 	adjustCPUShares := version.LessThan("1.19")
 
-	containerID, warnings, err := s.daemon.ContainerCreate(name, config, hostConfig, adjustCPUShares)
+	container, warnings, err := s.daemon.ContainerCreate(name, config, hostConfig, adjustCPUShares)
 	if err != nil {
 		return err
 	}
 
 	return writeJSON(w, http.StatusCreated, &types.ContainerCreateResponse{
-		ID:       containerID,
+		ID:       container.ID,
 		Warnings: warnings,
 	})
 }
@@ -528,7 +528,8 @@ func (s *Server) wsContainersAttach(version version.Version, w http.ResponseWrit
 			logrus.Errorf("Error attaching websocket: %s", err)
 		}
 	})
-	h.ServeHTTP(w, r)
+	ws := websocket.Server{Handler: h, Handshake: nil}
+	ws.ServeHTTP(w, r)
 
 	return nil
 }

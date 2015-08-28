@@ -9,9 +9,10 @@ source "${MAKEDIR}/.validate"
 
 packages=(
 	api
-	api/server
 	api/client
 	api/client/ps
+	api/server
+	api/types
 	builder
 	builder/command
 	builder/parser
@@ -24,8 +25,11 @@ packages=(
 	daemon/execdriver/native
 	daemon/execdriver/native/template
 	daemon/execdriver/windows
+	daemon/graphdriver
 	daemon/graphdriver/aufs
 	daemon/graphdriver/devmapper
+	daemon/graphdriver/overlay
+	daemon/graphdriver/vfs
 	daemon/graphdriver/zfs
 	daemon/logger
 	daemon/logger/fluentd
@@ -37,9 +41,10 @@ packages=(
 	docker
 	dockerinit
 	graph
-	daemon/graphdriver/vfs
+	graph/tags
 	image
 	integration-cli
+	opts
 	pkg/archive
 	pkg/broadcastwriter
 	pkg/chrootarchive
@@ -49,6 +54,8 @@ packages=(
 	pkg/homedir
 	pkg/httputils
 	pkg/ioutils
+	pkg/jsonlog
+	pkg/jsonmessage
 	pkg/listenbuffer
 	pkg/mflag
 	pkg/mflag/example
@@ -70,12 +77,13 @@ packages=(
 	pkg/reexec
 	pkg/signal
 	pkg/sockets
+	pkg/stdcopy
 	pkg/streamformatter
 	pkg/stringid
 	pkg/stringutils
-	pkg/sysinfo
-	pkg/systemd
 	pkg/symlink
+	pkg/sysinfo
+	pkg/system
 	pkg/tailfile
 	pkg/tarsum
 	pkg/term
@@ -90,6 +98,7 @@ packages=(
 	pkg/version
 	registry
 	runconfig
+	trust
 	utils
 	volume
 	volume/local

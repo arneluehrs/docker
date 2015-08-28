@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y \
 	createrepo \
 	curl \
 	dpkg-sig \
+	gcc-mingw-w64 \
 	git \
 	iptables \
 	libapparmor-dev \
@@ -147,7 +148,7 @@ RUN set -x \
 	&& rm -rf "$GOPATH"
 
 # Get the "docker-py" source so we can run their integration tests
-ENV DOCKER_PY_COMMIT 8a87001d09852058f08a807ab6e8491d57ca1e88
+ENV DOCKER_PY_COMMIT 139850f3f3b17357bab5ba3edfb745fb14043764
 RUN git clone https://github.com/docker/docker-py.git /docker-py \
 	&& cd /docker-py \
 	&& git checkout -q $DOCKER_PY_COMMIT

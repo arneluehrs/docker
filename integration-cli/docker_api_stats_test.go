@@ -17,8 +17,7 @@ func (s *DockerSuite) TestCliStatsNoStreamGetCpu(c *check.C) {
 	out, _ := dockerCmd(c, "run", "-d", "busybox", "/bin/sh", "-c", "while true;do echo 'Hello'; usleep 100000; done")
 
 	id := strings.TrimSpace(out)
-	err := waitRun(id)
-	c.Assert(err, check.IsNil)
+	c.Assert(waitRun(id), check.IsNil)
 
 	resp, body, err := sockRequestRaw("GET", fmt.Sprintf("/containers/%s/stats?stream=false", id), nil, "")
 	c.Assert(err, check.IsNil)
@@ -31,9 +30,9 @@ func (s *DockerSuite) TestCliStatsNoStreamGetCpu(c *check.C) {
 	body.Close()
 
 	var cpuPercent = 0.0
-	cpuDelta := float64(v.CpuStats.CpuUsage.TotalUsage - v.PreCpuStats.CpuUsage.TotalUsage)
-	systemDelta := float64(v.CpuStats.SystemUsage - v.PreCpuStats.SystemUsage)
-	cpuPercent = (cpuDelta / systemDelta) * float64(len(v.CpuStats.CpuUsage.PercpuUsage)) * 100.0
+	cpuDelta := float64(v.CPUStats.CPUUsage.TotalUsage - v.PreCPUStats.CPUUsage.TotalUsage)
+	systemDelta := float64(v.CPUStats.SystemUsage - v.PreCPUStats.SystemUsage)
+	cpuPercent = (cpuDelta / systemDelta) * float64(len(v.CPUStats.CPUUsage.PercpuUsage)) * 100.0
 	if cpuPercent == 0 {
 		c.Fatalf("docker stats with no-stream get cpu usage failed: was %v", cpuPercent)
 	}
@@ -79,8 +78,7 @@ func (s *DockerSuite) TestApiNetworkStats(c *check.C) {
 	// Run container for 30 secs
 	out, _ := dockerCmd(c, "run", "-d", "busybox", "top")
 	id := strings.TrimSpace(out)
-	err := waitRun(id)
-	c.Assert(err, check.IsNil)
+	c.Assert(waitRun(id), check.IsNil)
 
 	// Retrieve the container address
 	contIP := findContainerIP(c, id)
@@ -106,7 +104,7 @@ func (s *DockerSuite) TestApiNetworkStats(c *check.C) {
 		check.Commentf("Reported less Txbytes than expected. Expected >= %d. Found %d. %s", expRxPkts, nwStatsPost.RxPackets, pingouts))
 }
 
-func getNetworkStats(c *check.C, id string) types.Network {
+func getNetworkStats(c *check.C, id string) types.NetworkStats {
 	var st *types.Stats
 
 	_, body, err := sockRequestRaw("GET", fmt.Sprintf("/containers/%s/stats?stream=false", id), nil, "")
